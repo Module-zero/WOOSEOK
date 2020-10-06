@@ -1,4 +1,6 @@
 /*
+스택 수열
+
 문제
 스택 (stack)은 기본적인 자료구조 중 하나로, 컴퓨터 프로그램을 작성할 때 자주 이용되는 개념이다. 스택은 자료를 넣는 (push) 입구와 자료를 뽑는 (pop) 입구가 같아 제일 나중에 들어간 자료가 제일 먼저 나오는 (LIFO, Last in First out) 특성을 가지고 있다.
 
@@ -12,6 +14,7 @@
  */
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Stack;
 
@@ -24,7 +27,7 @@ import java.util.Stack;
 
 public class Q1874
 {
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -36,11 +39,33 @@ public class Q1874
             ary[i] = Integer.parseInt(br.readLine());
         }
 
-        int cnt = 0;
+        StringBuilder sb = new StringBuilder();
 
-        while(cnt < n)
+        Stack<Integer> stack = new Stack<>();
+
+        int num = 1;
+        int i=0;
+        for(; i<n; i++)
         {
-            
+            int aryNum = ary[i];
+
+            while(num <= aryNum)
+            {
+                stack.push(num);
+                sb.append("+\n");
+                ++num;
+            }
+
+            int stackNum = stack.pop();
+            sb.append("-\n");
+
+            if(stackNum > aryNum)
+                break;
         }
+
+        if(i < n)
+            System.out.println("NO");
+        else
+            System.out.println(sb.toString());
     }
 }
