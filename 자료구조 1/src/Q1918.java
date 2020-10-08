@@ -42,65 +42,33 @@ public class Q1918
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String str = br.readLine();
+        int sLen = str.length();
 
-        char[] cAry = str.toCharArray();
-        int cLen = cAry.length;
-
-        Stack<Character> stack = new Stack<>();
         StringBuilder sb = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
 
-        for(int i=0; i<cLen; i++)
+        for(int i=0; i<sLen; i++)
         {
-            if(cAry[i] >= 'A' && cAry[i] <= 'Z')
+            char ch = str.charAt(i);
+
+            if(ch >= 'A' && ch <= 'Z')
             {
-                sb.append(cAry[i]);
-
-                if(!stack.isEmpty())
-                {
-                    char operator = stack.pop();
-
-                    // 스택에서 꺼낸 연산자가 *나 /면 붙인다.
-                    if(operator == '*' || operator == '/')
-                    {
-                        sb.append(operator);
-                    }
-                    else // 아니면 다시 스택에 넣는다.
-                        stack.push(operator);
-                }
-            }
-            else if(cAry[i] == ')')
-            {
-                // 여는 괄호 스택에서 삭제
-                char operator = stack.pop();
-                // operator가 여는 괄호가 아니었을 경우 한 번 더 pop
-                if(operator != '(')
-                    stack.pop();
-
-                sb.append(operator);
-            }
-            else if(cAry[i] == '+' || cAry[i] == '-')
-            {
-                if(!stack.isEmpty())
-                {
-                    char operator = stack.pop();
-
-                    if(operator == '+' || operator == '-')
-                    {
-                        sb.append(operator);
-                    }
-                }
-
-                stack.push(cAry[i]);
+                sb.append(ch);
             }
             else
             {
-                stack.push(cAry[i]);
+                if(!stack.isEmpty())
+                {
+                    char sCh = stack.pop();
+
+                    if(sCh == '*' || sCh == '/')
+                    {
+
+                    }
+                }
+
+                stack.push(ch);
             }
         }
-
-        while(!stack.isEmpty())
-            sb.append(stack.pop());
-
-        System.out.println(sb.toString());
     }
 }

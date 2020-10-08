@@ -29,31 +29,39 @@ public class Q1373
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String str = br.readLine();
-        char[] cAry = str.toCharArray();
-        int cLen = str.length();
-
-        int cnt = 0;
-        int sum = 0;
-
+        int sLen = str.length();
         StringBuilder sb = new StringBuilder();
 
-        int startIndex = cLen % 3;
+        int rem = sLen % 3;
 
-        for(int i=startIndex-1; i>=0; i++)
+        if(rem != 0)
         {
-            if(cAry[startIndex-1 - i] == '1')
-                sum += (1 << i);
-        }
-        sb.append(sum);
+            int sum = 0;
+            int power = 1;
+            for(int i=rem-1; i>=0; i--)
+            {
+                sum += (str.charAt(i) - '0') * power;
+                power *= 2;
+            }
 
-        for(int i=startIndex; i<cLen; i+=3)
+            sb.append(sum);
+        }
+
+        for(int i=rem; i<sLen; i+=3)
         {
-            if(cAry[i] == '1')
-                sum += (1 << cnt);
-        }
+            int sum = 0;
+            int power = 1;
 
-        if(sum != 0)
-            sb.insert(0, sum);
+            for(int j=i+2; j>=i; j--)
+            {
+                sum += (str.charAt(j) - '0') * power;
+                power <<= 1;
+            }
+
+            // 시간 초과의 원인
+            // sb.insert(0, sum);
+            sb.append(sum);
+        }
 
         System.out.println(sb.toString());
     }

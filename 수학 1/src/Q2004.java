@@ -33,63 +33,26 @@ public class Q2004
 
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
+        int o = n-m;
 
-        // 조합 : n! / ((n-m)! * m!)
-        // 더 큰 값으로 교체
-        m = (n-m > m) ? (n-m) : m;
+        long cnt2 = 0;
+        long cnt5 = 0;
 
-        int cntSum = 0;
-        int cnt2 = 0;
-        int cnt5 = 0;
-        for(int i=m+1; i<=n; i++)
-        {
-            int tmp = i;
-            if(tmp % 2 == 0)
-            {
-                while(tmp % 2 == 0)
-                {
-                    ++cnt2;
-                    tmp /= 2;
-                }
-            }
-            if(tmp % 5 == 0)
-            {
-                while(tmp % 5 == 0)
-                {
-                    ++cnt5;
-                    tmp /= 5;
-                }
-            }
-        }
+        for(long power = 2; power <= n; power *= 2)
+            cnt2 += n/power;
+        for(long power = 5; power <= n; power *= 5)
+            cnt5 += n/power;
 
-        cntSum = (cnt2 < cnt5) ? cnt2 : cnt5;
-        cnt2 = 0;
-        cnt5 = 0;
+        for(long power = 2; power <= m; power *= 2)
+            cnt2 -= m/power;
+        for(long power = 5; power <= m; power *= 5)
+            cnt5 -= m/power;
 
-        int endIndex = n-m;
-        for(int i=1; i<=endIndex; i++)
-        {
-            int tmp = i;
-            if(tmp % 2 == 0)
-            {
-                while(tmp % 2 == 0)
-                {
-                    ++cnt2;
-                    tmp /= 2;
-                }
-            }
-            if(tmp % 5 == 0)
-            {
-                while(tmp % 5 == 0)
-                {
-                    ++cnt5;
-                    tmp /= 5;
-                }
-            }
-        }
+        for(long power = 2; power <= o; power *= 2)
+            cnt2 -= o/power;
+        for(long power = 5; power <= o; power *= 5)
+            cnt5 -= o/power;
 
-        cntSum -= (cnt2 < cnt5) ? cnt2 : cnt5;
-
-        System.out.println(cntSum);
+        System.out.println((cnt2 < cnt5) ? cnt2 : cnt5);
     }
 }
