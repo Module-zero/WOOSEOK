@@ -51,24 +51,58 @@ public class Q1918
         {
             char ch = str.charAt(i);
 
-            if(ch >= 'A' && ch <= 'Z')
+            switch(ch)
             {
-                sb.append(ch);
-            }
-            else
-            {
-                if(!stack.isEmpty())
+                case '(':
+                    stack.push(ch);
+                    break;
+                case ')':
                 {
                     char sCh = stack.pop();
-
-                    if(sCh == '*' || sCh == '/')
-                    {
-
-                    }
+                    stack.pop(); // 짝이 되는 여는 괄호 스택에서 삭제
+                    sb.append(sCh);
+                    break;
                 }
+                case '*':
+                case '/':
+                {
+                    while(!stack.isEmpty())
+                    {
+                        char sCh = stack.pop();
+                        if(sCh == '*' || sCh == '/')
+                            sb.append(sCh);
+                        else
+                            stack.push(sCh);
+                    }
+                    stack.push(ch);
+                    break;
+                }
+                case '+':
+                case '-':
+                {
+                    if(!stack.isEmpty())
+                    {
+                        char sCh = stack.pop();
 
-                stack.push(ch);
+                        if(sCh == '(')
+                            stack.push(sCh);
+                        else
+                            sb.append(sCh);
+                    }
+                    stack.push(ch);
+                    break;
+                }
+                default: // 알파벳일 경우
+                {
+                    sb.append(ch);
+                    break;
+                }
             }
         }
+
+        while(!stack.isEmpty())
+            sb.append(stack.pop());
+
+        System.out.println(sb.toString());
     }
 }
