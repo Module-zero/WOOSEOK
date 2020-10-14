@@ -17,6 +17,12 @@
 둘째 줄에는 가장 긴 증가하는 부분 수열을 출력한다. 그러한 수열이 여러가지인 경우 아무거나 출력한다.
  */
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
 /**
  * Created by WOOSERK.
  * User: WOOSERK
@@ -26,8 +32,57 @@
 
 public class Q14002
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+        int N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int[] A = new int[N+1];
+        for(int i=1; i<=N; i++)
+            A[i] = Integer.parseInt(st.nextToken());
+
+        // 이전 인덱스를 저장할 배열
+        int[] V = new int[N+1];
+        int[] len = new int[N+1];
+        int max = 1;
+        int maxIndex = 1;
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i=1; i<=N; i++)
+        {
+            len[i] = 1;
+            for(int j=1; j<=i-1; j++)
+            {
+                if(A[j] < A[i] && len[i] < len[j] + 1)
+                {
+                    len[i] = len[j] + 1;
+                    V[i] = j;
+
+                    if(len[i] > max)
+                    {
+                        max = len[i];
+                        maxIndex = i;
+                    }
+                }
+            }
+        }
+
+        while(maxIndex > 0)
+        {
+            stack.push(A[maxIndex]);
+            maxIndex = V[maxIndex];
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(max + "\n");
+        while(!stack.isEmpty())
+        {
+            sb.append(stack.pop() + " ");
+        }
+
+        System.out.println(sb.toString());
     }
 }
