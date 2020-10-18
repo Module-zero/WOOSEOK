@@ -1,7 +1,7 @@
 /*
-N과 M (5)
+N과 M (10)
 
-https://www.acmicpc.net/problem/15654
+https://www.acmicpc.net/problem/15664
  */
 
 import java.io.BufferedReader;
@@ -13,39 +13,37 @@ import java.util.StringTokenizer;
 /**
  * Created by WOOSERK.
  * User: WOOSERK
- * Date: 2020-10-16
- * Time: 오후 11:04
+ * Date: 2020-10-17
+ * Time: 오전 12:55
  */
 
-public class Q15654
+public class Q15664
 {
     static int N;
     static int M;
     static int[] ary;
+    static int[] ans;
+    static int[] cnt;
+    static int[] tmp;
     static StringBuilder sb = new StringBuilder();
 
-    public static void foo(int index, int[] ans, boolean[] check)
+    public static void foo(int index, int start)
     {
         if(index == M)
         {
             for(int i=0; i<M; i++)
-            {
                 sb.append(ans[i] + " ");
-            }
 
             sb.append("\n");
             return;
         }
 
-        for(int i=0; i<N; i++)
+        for(int i=start; i<N; i++)
         {
-            if(check[i])
-                continue;
+            int num = ary[i];
 
-            ans[index] = ary[i];
-            check[i] = true;
-            foo(index+1, ans, check);
-            check[i] = false;
+                ans[index] = num;
+                foo(index+1, i+1);
         }
     }
 
@@ -58,13 +56,20 @@ public class Q15654
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         ary = new int[N];
-        st = new StringTokenizer(br.readLine());
+        ans = new int[M];
+        cnt = new int[10001];
 
+        st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++)
-            ary[i] = Integer.parseInt(st.nextToken());
+        {
+            int num = Integer.parseInt(st.nextToken());
+            ary[i] = num;
+            cnt[num]++;
+        }
 
         Arrays.sort(ary);
-        foo(0, new int[M], new boolean[N]);
+
+        foo(0, 0);
         System.out.print(sb.toString());
     }
 }

@@ -1,7 +1,7 @@
 /*
-N과 M (5)
+N과 M (7)
 
-https://www.acmicpc.net/problem/15654
+https://www.acmicpc.net/problem/15656
  */
 
 import java.io.BufferedReader;
@@ -14,24 +14,22 @@ import java.util.StringTokenizer;
  * Created by WOOSERK.
  * User: WOOSERK
  * Date: 2020-10-16
- * Time: 오후 11:04
+ * Time: 오후 11:54
  */
 
-public class Q15654
+public class Q15656
 {
     static int N;
     static int M;
     static int[] ary;
     static StringBuilder sb = new StringBuilder();
 
-    public static void foo(int index, int[] ans, boolean[] check)
+    public static void foo(int index, int[] ans)
     {
         if(index == M)
         {
             for(int i=0; i<M; i++)
-            {
                 sb.append(ans[i] + " ");
-            }
 
             sb.append("\n");
             return;
@@ -39,13 +37,8 @@ public class Q15654
 
         for(int i=0; i<N; i++)
         {
-            if(check[i])
-                continue;
-
             ans[index] = ary[i];
-            check[i] = true;
-            foo(index+1, ans, check);
-            check[i] = false;
+            foo(index+1, ans);
         }
     }
 
@@ -54,17 +47,17 @@ public class Q15654
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         ary = new int[N];
-        st = new StringTokenizer(br.readLine());
 
+        st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++)
             ary[i] = Integer.parseInt(st.nextToken());
 
         Arrays.sort(ary);
-        foo(0, new int[M], new boolean[N]);
+
+        foo(0, new int[M]);
         System.out.print(sb.toString());
     }
 }
