@@ -26,9 +26,15 @@ public class Q13023
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
+        boolean[][] friend = new boolean[N][N];
         for(int i=0; i<M; i++)
         {
+            st = new StringTokenizer(br.readLine());
 
+            int id1 = Integer.parseInt(st.nextToken());
+            int id2 = Integer.parseInt(st.nextToken());
+
+            friend[id1][id2] = true;
         }
     }
 }
