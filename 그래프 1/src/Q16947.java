@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -21,45 +23,39 @@ public class Q16947
 {
     public static int N;
     public static ArrayList<ArrayList<Integer>> ary;
+    public static int[] check = new int[3001];
     public static int[] dist = new int[3001];
-    public static boolean[] isCycle = new boolean[3001];
-    public static int cycleStartIndex = 0;
 
-    public static void dfs(int num, int cnt)
+    // -2 : 사이클을 찾았지만 해당 정점은 사이클이 아님
+    // -1 : 사이클을 찾지 못함
+    // 1 ~ n : 사이클의 시작 인덱스
+    public static int dfs(int index, int prev)
     {
-        if(isCycle[num])
-        {
-            // 사이클이 시작되는 정점인지 찾는다.
-            if(cnt - dist[num] >= 3)
-                cycleStartIndex = num;
+        if(check[index] == 1)
+            return index;
 
-            return;
+        check[index] = 1;
+
+        int size = ary.get(index).size();
+        for(int i=0; i<size; i++)
+        {
+            int target = ary.get(index).get(i);
+            // 바로 전 지나온 곳이 다음 목적지면 스킵
+            if(target == prev)
+                continue;
+
+            int res = dfs(target, index);
+            if(res == -2)
+                return res;
+
+            if(res >= 1)
+            {
+                check[index] = 2;
+                return (res == index) ? -2 : res;
+            }
         }
 
-        isCycle[num] = true;
-        dist[num] = cnt;
-
-        ArrayList<Integer> tAry = ary.get(num);
-        for(int j=0; j<tAry.size(); j++)
-        {
-            // 연결된 정점 하나를 꺼낸다.
-            int target = tAry.get(j);
-
-            // isCycle 배열을 방문한 노드를 체크하는 데에 사용
-            dfs(target, cnt+1);
-
-            // 순환선을 찾았으면 탐색 종료(isCycle 배열은 해당 정점이 순환선에 포함되는지 검사하는 데에 사용)
-            if(cycleStartIndex > 0)
-                break;
-        }
-
-        // 순환선 시작점이 자기 자신이면
-        if(cycleStartIndex == num)
-            cycleStartIndex = -1;
-        // 순환선이 끝났거나 못찾았으면 자기 자신은 순환선이 아님
-        else if(cycleStartIndex <= 0)
-            isCycle[num] = false;
-
+        return -1;
     }
 
     public static void main(String[] args) throws IOException
@@ -71,74 +67,57 @@ public class Q16947
         for(int i=0; i<=N; i++)
             ary.add(new ArrayList<>());
 
-        for(int i=0; i<N; i++)
+        int i = N;
+        while(i-- > 0)
         {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
-            int id1 = Integer.parseInt(st.nextToken());
-            int id2 = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
 
-            ary.get(id1).add(id2);
-            ary.get(id2).add(id1);
+            ary.get(a).add(b);
+            ary.get(b).add(a);
         }
 
-        for(int i=1; i<=N; i++)
-        {
-            isCycle[i] = true;
-
-            ArrayList<Integer> tAry = ary.get(i);
-            for(int j=0; j<tAry.size(); j++)
-            {
-                // 연결된 정점 하나를 꺼낸다.
-                int num = tAry.get(j);
-
-                // isCycle 배열을 방문한 노드를 체크하는 데에 사용
-                dfs(num, 1);
-
-                // 순환선을 찾았으면 탐색 종료(isCycle 배열은 해당 정점이 순환선에 포함되는지 검사하는 데에 사용)
-                if(cycleStartIndex > 0)
-                {
-                    // 순환선 시작점이 자기 자신이면
-                    if(cycleStartIndex == i)
-                        cycleStartIndex = -1;
-                    break;
-                }
-                // 순환선이 끝났거나 못찾았으면 자기 자신은 순환선이 아님
-                else if(cycleStartIndex < 0)
-                {
-                    isCycle[i] = false;
-                    break;
-                }
-
-                isCycle[num] = false;
-            }
-
-            if(cycleStartIndex > 0)
-                break;
-
-            isCycle[i] = false;
-        }
-
-        for(int i=1; i<=N; i++)
-            System.out.print(isCycle[i] + " ");
-        System.out.println();
+        dfs(1, 0);
 
         StringBuilder sb = new StringBuilder();
 
-        // 순환선과의 거리 계산
-        for(int i=1; i<=N; i++)
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[3001];
+
+        for(int j=1; j<=N; j++)
         {
-            int cnt = 0;
-
-            int num = i;
-            while(!isCycle[num])
+            // 순환선에서 시작
+            if(check[j] == 2)
             {
-                num = ary.get(num).get(0);
-                cnt++;
-            }
+                queue.add(j);
+                visited[j] = true;
 
-            sb.append(cnt + " ");
+                while(!queue.isEmpty())
+                {
+                    int num = queue.poll();
+
+                    int size = ary.get(num).size();
+                    for(int k=0; k<size; k++)
+                    {
+                        int target = ary.get(num).get(k);
+
+                        if(!visited[target])
+                        {
+                            if(check[target] != 2)
+                                dist[target] = dist[num] + 1;
+
+                            queue.add(target);
+                            visited[target] = true;
+                        }
+                    }
+                }
+            }
         }
+
+        for(int j=1; j<=N; j++)
+            sb.append(dist[j] + " ");
 
         System.out.println(sb.toString());
     }

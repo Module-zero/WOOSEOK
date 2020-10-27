@@ -22,31 +22,17 @@ public class Q15663
     static int M;
     static int[] ary;
     static int[] tmp;
-    static HashSet<int[]> set;
+    static int[] cnt = new int[10001];
     static StringBuilder sb = new StringBuilder();
 
     public static void foo(int index, int prevIndex)
     {
         if(index == M)
         {
-            if(!set.add(tmp))
-            {
-                for (int i = 0; i < M; i++)
-                    sb.append(tmp[i] + " ");
-
-                sb.append("\n");
-            }
-
-            return;
         }
 
         for(int i=0; i<N; i++)
         {
-            if(i == prevIndex)
-                continue;
-
-            tmp[index] = ary[i];
-            foo(index+1, i);
         }
     }
 
@@ -59,13 +45,16 @@ public class Q15663
         M = Integer.parseInt(st.nextToken());
         ary = new int[N];
         tmp = new int[M];
-        set = new HashSet<>();
 
         st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++)
             ary[i] = Integer.parseInt(st.nextToken());
 
         Arrays.sort(ary);
+
+        int prev = 0;
+        for(int i=0; i<N; i++)
+            cnt[ary[i]] += 1;
 
         foo(0, -1);
 
