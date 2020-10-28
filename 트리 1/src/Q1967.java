@@ -21,22 +21,22 @@ public class Q1967
 {
     static ArrayList<ArrayList<int[]>> ary;
     static int n;
-    static int max = 0;
-    static int ans = 0;
+    static int max = Integer.MIN_VALUE;
 
-    public static int postorder(int index, int sum)
+    public static int postorder(int index, int gravity)
     {
-        int size = ary.get(index).size();
+        ArrayList<Integer> gravity = new ArrayList<>();
+        int sum = 0;
 
-        // 탐색
-        for (int i = 0; i < size; i++)
+        for(int[] tmp : ary.get(index))
         {
-            int[] tmp = ary.get(index).get(i);
+            int to = tmp[0];
+            int cost = tmp[1];
 
-            postorder(tmp[0], sum + tmp[1]);
+            int res = postorder(to);
+
+            sum = Integer.max(max, sum);
         }
-
-
     }
 
     public static void main(String[] args) throws IOException
@@ -44,13 +44,11 @@ public class Q1967
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         n = Integer.parseInt(br.readLine());
-
         ary = new ArrayList<>();
         for(int i=0; i<=n; i++)
             ary.add(new ArrayList<>());
 
-        int i = n-1;
-        while(i-- > 0)
+        for(int i=0; i<n-1; i++)
         {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -58,11 +56,9 @@ public class Q1967
             int child = Integer.parseInt(st.nextToken());
             int dist = Integer.parseInt(st.nextToken());
 
-            // [0] : 정점, [1] : 거리
             ary.get(parent).add(new int[]{child, dist});
         }
 
-        postorder(1, 0);
-        System.out.println(ans);
+
     }
 }

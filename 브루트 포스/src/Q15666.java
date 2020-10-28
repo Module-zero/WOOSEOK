@@ -1,7 +1,7 @@
 /*
-N과 M (9)
+N과 M (12)
 
-https://www.acmicpc.net/problem/15663
+https://www.acmicpc.net/problem/15666
  */
 
 import java.io.BufferedReader;
@@ -13,40 +13,37 @@ import java.util.StringTokenizer;
 /**
  * Created by WOOSERK.
  * User: WOOSERK
- * Date: 2020-10-17
- * Time: 오전 12:10
+ * Date: 2020-10-27
+ * Time: 오후 9:15
  */
 
-public class Q15663
+public class Q15666
 {
     static int N;
     static int M;
     static int[] ary;
     static int[] tmp;
-    static boolean[] check = new boolean[8];
     static StringBuilder sb = new StringBuilder();
 
-    public static void foo(int index)
+    public static void foo(int index, int start)
     {
         if(index == M)
         {
             for(int i=0; i<M; i++)
-                sb.append(tmp[i] + " ");
+                sb.append(tmp[i]).append(" ");
 
             sb.append("\n");
             return;
         }
 
-        int prev = 0;
-        for(int i=0; i<N; i++)
+        int prev = -1;
+        for(int i=start; i<N; i++)
         {
-            if(!check[i] && ary[i] != prev)
+            if(ary[i] != prev)
             {
-                tmp[index] = ary[i];
                 prev = ary[i];
-                check[i] = true;
-                foo(index+1);
-                check[i] = false;
+                tmp[index] = ary[i];
+                foo(index+1, i);
             }
         }
     }
@@ -67,7 +64,7 @@ public class Q15663
 
         Arrays.sort(ary);
 
-        foo(0);
+        foo(0, 0);
 
         System.out.print(sb.toString());
     }

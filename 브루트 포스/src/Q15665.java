@@ -1,7 +1,7 @@
 /*
-N과 M (9)
+N과 M (11)
 
-https://www.acmicpc.net/problem/15663
+https://www.acmicpc.net/problem/15665
  */
 
 import java.io.BufferedReader;
@@ -13,17 +13,16 @@ import java.util.StringTokenizer;
 /**
  * Created by WOOSERK.
  * User: WOOSERK
- * Date: 2020-10-17
- * Time: 오전 12:10
+ * Date: 2020-10-27
+ * Time: 오후 8:42
  */
 
-public class Q15663
+public class Q15665
 {
     static int N;
     static int M;
     static int[] ary;
     static int[] tmp;
-    static boolean[] check = new boolean[8];
     static StringBuilder sb = new StringBuilder();
 
     public static void foo(int index)
@@ -31,22 +30,20 @@ public class Q15663
         if(index == M)
         {
             for(int i=0; i<M; i++)
-                sb.append(tmp[i] + " ");
+                sb.append(tmp[i]).append(" ");
 
             sb.append("\n");
             return;
         }
 
-        int prev = 0;
+        int prev = -1;
         for(int i=0; i<N; i++)
         {
-            if(!check[i] && ary[i] != prev)
+            if(ary[i] != prev)
             {
-                tmp[index] = ary[i];
                 prev = ary[i];
-                check[i] = true;
+                tmp[index] = ary[i];
                 foo(index+1);
-                check[i] = false;
             }
         }
     }
@@ -56,6 +53,7 @@ public class Q15663
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         ary = new int[N];
