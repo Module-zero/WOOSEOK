@@ -49,3 +49,4 @@
     Q16947. 서울 지하철 2호선 : https://www.acmicpc.net/problem/16947
     Q15663. N과 M (9) : https://www.acmicpc.net/problem/15663
     Q9019. DSLR : https://www.acmicpc.net/problem/9019 (시간복잡도 개선)
+    Q2206. 벽 부수고 이동하기 : https://www.acmicpc.net/problem/2206 (시간복잡도 개선)
