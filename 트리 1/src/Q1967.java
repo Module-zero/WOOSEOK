@@ -19,23 +19,30 @@ import java.util.StringTokenizer;
 
 public class Q1967
 {
-    static ArrayList<ArrayList<int[]>> ary;
     static int n;
-    static int max = Integer.MIN_VALUE;
+    static boolean[] check = new boolean[10001];
+    static ArrayList<ArrayList<int[]>> ary = new ArrayList<>();
+    static int ans = 0;
+    static int ansIndex = 0;
 
-    public static int postorder(int index, int gravity)
+    public static void dfs(int index, int weight)
     {
-        ArrayList<Integer> gravity = new ArrayList<>();
-        int sum = 0;
+        check[index] = true;
 
-        for(int[] tmp : ary.get(index))
+        ArrayList<int[]> list = ary.get(index);
+        for(int i=0; i<list.size(); i++)
         {
-            int to = tmp[0];
-            int cost = tmp[1];
+            int[] tmp = list.get(i);
 
-            int res = postorder(to);
+            // 아직 들르지 않았으면 들른다.
+            if(!check[tmp[0]])
+                dfs(tmp[0], weight + tmp[1]);
+        }
 
-            sum = Integer.max(max, sum);
+        if(weight > ans)
+        {
+            ans = weight;
+            ansIndex = index;
         }
     }
 
@@ -44,7 +51,7 @@ public class Q1967
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         n = Integer.parseInt(br.readLine());
-        ary = new ArrayList<>();
+
         for(int i=0; i<=n; i++)
             ary.add(new ArrayList<>());
 
@@ -54,11 +61,15 @@ public class Q1967
 
             int parent = Integer.parseInt(st.nextToken());
             int child = Integer.parseInt(st.nextToken());
-            int dist = Integer.parseInt(st.nextToken());
+            int weight = Integer.parseInt(st.nextToken());
 
-            ary.get(parent).add(new int[]{child, dist});
+            ary.get(parent).add(new int[]{child, weight});
+            ary.get(child).add(new int[]{parent, weight});
         }
 
-
+        dfs(1, 0);
+        check = new boolean[10001];
+        dfs(ansIndex, 0);
+        System.out.println(ans);
     }
 }
