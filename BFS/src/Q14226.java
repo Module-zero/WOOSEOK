@@ -24,42 +24,53 @@ public class Q14226
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int S = Integer.parseInt(br.readLine());
+        // [0] : 화면, [1] : 클립보드
+        boolean[][] check = new boolean[1001][1001];
 
         Queue<int[]> queue = new LinkedList<>();
-        int clip = 0;
-        // [][0] : 
-        int[][] check = new int[1001][2];
-        // 이모티콘의 개수
-        int cnt = 1;
-        // 걸린 시간
-        int time = 0;
 
-        // [0] : 이모티콘 개수, [1] : 걸린 시간, [2] : 클립에 있는 이모티콘 수
-        queue.add(new int[]{cnt, time, clip});
+        // [0] : 화면의 이모티콘 개수, [1] : 시간, [2] : 클립보드의 이모티콘 개수
+        queue.add(new int[]{1, 0, 0});
+        check[0][0] = true;
 
         while(!queue.isEmpty())
         {
-            // 큐의 다음 순번을 본다.
-            int[] info = queue.peek();
+            int[] tmp = queue.poll();
 
-            // 현재 시간의 행동이 큐에서 없어질 때까지
-            while(info[1] == time)
+            //화면에 있는 이모티콘을 모두 복사해서 클립보드에 저장한다.
+            if(!check[tmp[0]][tmp[0]])
             {
-                cnt = info[0];
-                clip = info[2];
-                // 큐에서 뺸다.
-                queue.poll();
-
-                queue.add(new int[]{cnt, time + 1, cnt});
-
-                // 클립이 0이면 붙여넣는 의미가 없다.
-                if(clip != 0)
-                    queue.add(new int[]{cnt + info[2], time + 1, clip});
-
-                queue.add(new int[]{cnt - 1, time + 1, clip});
+                check[tmp[0]][tmp[0]] = true;
+                queue.add(new int[]{tmp[0], tmp[1] + 1, tmp[0]});
             }
 
-            time++;
+            //클립보드에 있는 모든 이모티콘을 화면에 붙여넣기 한다.
+            if(tmp[0] + tmp[2] <= S && !check[tmp[0] + tmp[2]][tmp[2]])
+            {
+                // 정답이면
+                if(tmp[0] + tmp[2] == S)
+                {
+                    System.out.println(tmp[1] + 1);
+                    return;
+                }
+
+                check[tmp[0] + tmp[2]][tmp[2]] = true;
+                queue.add(new int[]{tmp[0] + tmp[2], tmp[1] + 1, tmp[2]});
+            }
+
+            //화면에 있는 이모티콘 중 하나를 삭제한다.
+            if(tmp[0] - 1 >= 0 && !check[tmp[0] - 1][tmp[2]])
+            {
+                // 정답이면
+                if(tmp[0] - 1 == S)
+                {
+                    System.out.println(tmp[1] + 1);
+                    return;
+                }
+
+                check[tmp[0] - 1][tmp[2]] = true;
+                queue.add(new int[]{tmp[0] - 1, tmp[1] + 1, tmp[2]});
+            }
         }
     }
 }

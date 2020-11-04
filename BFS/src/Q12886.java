@@ -30,30 +30,61 @@ public class Q12886
         int B = Integer.parseInt(st.nextToken());
         int C = Integer.parseInt(st.nextToken());
 
-        if((A+B+C)%3 != 0)
+        if((A + B + C) % 3 != 0)
         {
-            System.out.println("0");
+            System.out.println(0);
             return;
         }
 
-        // 셋 다 같은 수가 되어야 됨
-        int target = (A+B+C)/3;
+        // 이미 같으면 종료
+        if(A == B && B == C)
+        {
+            System.out.println(1);
+            return;
+        }
+
+        int sum = A + B + C;
 
         Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{A, B, C});
+        boolean[][] check = new boolean[1501][1501];
+        queue.add(new int[]{A, B});
+        check[A][B] = true;
+        check[B][A] = true;
 
         while(!queue.isEmpty())
         {
             int[] tmp = queue.poll();
             int a = tmp[0];
             int b = tmp[1];
-            int c = tmp[2];
 
-            // 답을 찾았으면 종료
-            if(a == target && b == target && c == target)
+            int[] target1 = {a, a, b};
+            int[] target2 = {b, sum - a - b, sum - a - b};
+
+            for(int i=0; i<3; i++)
             {
-                return;
+                int target3 = sum - target1[i] - target2[i];
+
+                int min = Integer.min(Integer.min(target1[i], target2[i]), target3);
+                int max = Integer.max(Integer.max(target1[i], target2[i]), target3);
+
+                max = max - min;
+                min = min + min;
+
+                if(min == max)
+                {
+                    System.out.println(1);
+                    return;
+                }
+
+                if(!check[min][max])
+                {
+                    check[min][max] = true;
+                    check[max][min] = true;
+                    queue.add(new int[]{min, max});
+                }
             }
         }
+
+        System.out.println(0);
     }
 }

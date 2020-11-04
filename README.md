@@ -51,9 +51,13 @@
     * _2020-10-29(목)_
         * 배열을 선언할 때 최대치로 선언하든 변수로 선언하든 큰 차이가 없다.(오히려 변수로 선언한 게 경우에 따라 시간복잡도가 느릴 수 있다.)
         
+    * _2020-11-04(수)_
+        * 자바에서는 Arrays.sort가 O(N^2)의 시간 복잡도를 가지므로 배열을 섞고 Arrays.sort를 사용하던지 Collections.sort를 사용하는 것이 무조건 좋다.
+        * 이분 탐색으로 정답을 찾는 것이 가능한 문제는 어떤 기준으로 Yes/No로 나뉘는 문제이다.
+        
 * 다시 봐야 할 것
-    Q14391. 종이 조각 : https://www.acmicpc.net/problem/14391
-    Q16947. 서울 지하철 2호선 : https://www.acmicpc.net/problem/16947
-    Q15663. N과 M (9) : https://www.acmicpc.net/problem/15663
-    Q9019. DSLR : https://www.acmicpc.net/problem/9019 (시간복잡도 개선)
-    Q2206. 벽 부수고 이동하기 : https://www.acmicpc.net/problem/2206 (시간복잡도 개선)
+    * Q14391. 종이 조각 : https://www.acmicpc.net/problem/14391
+    * Q16947. 서울 지하철 2호선 : https://www.acmicpc.net/problem/16947
+    * Q15663. N과 M (9) : https://www.acmicpc.net/problem/15663
+    * Q9019. DSLR : https://www.acmicpc.net/problem/9019 (시간복잡도 개선)
+    * Q2206. 벽 부수고 이동하기 : https://www.acmicpc.net/problem/2206 (시간복잡도 개선)
