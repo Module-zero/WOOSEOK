@@ -36,17 +36,10 @@ public class Q12886
             return;
         }
 
-        // 이미 같으면 종료
-        if(A == B && B == C)
-        {
-            System.out.println(1);
-            return;
-        }
-
         int sum = A + B + C;
 
         Queue<int[]> queue = new LinkedList<>();
-        boolean[][] check = new boolean[1501][1501];
+        boolean[][] check = new boolean[1001][1001];
         queue.add(new int[]{A, B});
         check[A][B] = true;
         check[B][A] = true;
@@ -56,35 +49,32 @@ public class Q12886
             int[] tmp = queue.poll();
             int a = tmp[0];
             int b = tmp[1];
+            int c = sum - a - b;
 
-            int[] target1 = {a, a, b};
-            int[] target2 = {b, sum - a - b, sum - a - b};
+            int[] ary = {a, b, c};
 
             for(int i=0; i<3; i++)
             {
-                int target3 = sum - target1[i] - target2[i];
-
-                int min = Integer.min(Integer.min(target1[i], target2[i]), target3);
-                int max = Integer.max(Integer.max(target1[i], target2[i]), target3);
-
-                max = max - min;
-                min = min + min;
-
-                if(min == max)
+                for(int j=0; j<3; j++)
                 {
-                    System.out.println(1);
-                    return;
-                }
-
-                if(!check[min][max])
-                {
-                    check[min][max] = true;
-                    check[max][min] = true;
-                    queue.add(new int[]{min, max});
+                    if(ary[i] < ary[j])
+                    {
+                        if(!check[ary[i]][ary[j]])
+                        {
+                            int ary2[] = {a, b, c};
+                            ary2[i] = ary[i] + ary[i];
+                            ary2[j] = ary[j] - ary[i];
+                            check[ary2[i]][ary2[j]] = true;
+                            queue.add(new int[]{ary2[i], ary2[j]});
+                        }
+                    }
                 }
             }
         }
 
-        System.out.println(0);
+        if(check[sum / 3][sum / 3])
+            System.out.println(1);
+        else
+            System.out.println(0);
     }
 }

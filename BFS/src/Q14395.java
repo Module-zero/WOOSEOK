@@ -1,9 +1,13 @@
+/*
+4연산
+
+https://www.acmicpc.net/problem/14395
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Created by WOOSERK.
@@ -14,6 +18,20 @@ import java.util.StringTokenizer;
 
 public class Q14395
 {
+    static long limit = 1000000000L;
+
+    static class Info
+    {
+        long num;
+        StringBuilder sb;
+
+        public Info(long num, StringBuilder sb)
+        {
+            this.num = num;
+            this.sb = sb;
+        }
+    }
+
     public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,29 +42,71 @@ public class Q14395
         long s = Long.parseLong(st.nextToken());
         long t = Long.parseLong(st.nextToken());
 
-        Queue<long[]> queue = new LinkedList<>();
-        queue.add(new long[]{s, 0});
+        if(s == t)
+        {
+            System.out.println(0);
+            return;
+        }
+
+        Queue<Info> queue = new LinkedList<>();
+        queue.add(new Info(s, new StringBuilder()));
+        Set<Long> check = new TreeSet<>();
+        check.add(s);
 
         while(!queue.isEmpty())
         {
-            long[] tmp = queue.poll();
+            Info tmp = queue.poll();
 
-            for(int i=0; i<4; i++)
+            long num = tmp.num;
+
+            // 정답이면 출력
+            if(num == t)
             {
-                char ch = dc[i];
+                System.out.println(tmp.sb.toString());
+                return;
+            }
 
-                switch(ch)
+            if(0 < num * num && num * num <= limit)
+            {
+                if(!check.contains(num*num))
                 {
-                    case '*':
-                        break;
-                    case '+':
-                        break;
-                    case '-':
-                        break;
-                    case '/':
-                        break;
+                    check.add(num*num);
+
+                    queue.add(new Info(num*num, new StringBuilder(tmp.sb).append('*')));
+                }
+            }
+
+            if(0 < num + num && num + num <= limit)
+            {
+                if(!check.contains(num+num))
+                {
+                    check.add(num+num);
+
+                    queue.add(new Info(num+num, new StringBuilder(tmp.sb).append('+')));
+                }
+            }
+
+            if(0 < num - num && num - num <= limit)
+            {
+                if(!check.contains(num-num))
+                {
+                    check.add(num-num);
+
+                    queue.add(new Info(num-num, new StringBuilder(tmp.sb).append('-')));
+                }
+            }
+
+            if(0 < num / num && num / num <= limit)
+            {
+                if(!check.contains(num/num))
+                {
+                    check.add(num/num);
+
+                    queue.add(new Info(num/num, new StringBuilder(tmp.sb).append('/')));
                 }
             }
         }
+
+        System.out.println(-1);
     }
 }
