@@ -26,7 +26,6 @@ public class Q1918
 
         StringBuilder sb = new StringBuilder();
         Stack<Character> opStack = new Stack<>();
-        int bracketCnt = 0;
         for(int i=0; i<str.length(); i++)
         {
             char ch = str.charAt(i);
@@ -35,36 +34,54 @@ public class Q1918
             {
                 case '+':
                 case '-':
+                    // 스택에 연산자가 있을 경우
+                    while(!opStack.isEmpty())
+                    {
+                        char op = opStack.peek();
+
+                        if(op == '+' || op == '-' || op == '*' || op == '/')
+                        {
+                            opStack.pop();
+                            sb.append(op);
+                        }
+                        else
+                            break;
+                    }
+
                     opStack.push(ch);
                     break;
                 case '*':
                 case '/':
+                    if(!opStack.isEmpty())
+                    {
+                        char op = opStack.peek();
+
+                        if (op == '*' || op == '/')
+                        {
+                            opStack.pop();
+                            sb.append(op);
+                        }
+                    }
+
                     opStack.push(ch);
                     break;
                 case '(':
                     opStack.push(ch);
-
-                    bracketCnt++;
                     break;
                 case ')':
-                    opStack.push(ch);
+                    while(true)
+                    {
+                        char op = opStack.pop();
+                        if(op == '(')
+                            break;
 
-                    sb.append(opStack.pop());
-                    bracketCnt--;
+                        sb.append(op);
+                    }
                     break;
                 // 알파벳일 경우
                 default:
                     sb.append(ch);
 
-                    // 스택에 연산자가 있을 경우
-                    if(!opStack.isEmpty())
-                    {
-                        char op = opStack.pop();
-                        if(op == '*' || op == '/')
-                        {
-
-                        }
-                    }
                     break;
             }
         }
