@@ -36,56 +36,6 @@ public class Q11054
         int N = Integer.parseInt(br.readLine());
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] A = new int[N+1];
 
-        for(int i=1; i<=N; i++)
-            A[i] = Integer.parseInt(st.nextToken());
-
-        int[] dp = new int[N+1];
-        int[] dp2 = new int[N+1];
-
-        int max = 1;
-        for(int i=1; i<=N; i++)
-        {
-            int incLen = 1;
-            int decLen = 1;
-            // 증가 부분수열
-            for(int j=1; j<=i; j++)
-            {
-                dp[j] = 1;
-
-                for(int k=1; k<=j-1; k++)
-                {
-                    if (A[j] > A[k] && dp[j] < dp[k] + 1)
-                    {
-                        dp[j] = dp[k] + 1;
-
-                        if (incLen < dp[k] + 1)
-                            incLen = dp[k] + 1;
-                    }
-                }
-            }
-
-            // 감소 부분수열
-            for(int j=i; j<=N; j++)
-            {
-                dp2[j] = 1;
-                for(int k=j; k<=j-1; k++)
-                {
-                    if (A[j] < A[k] && dp2[j] < dp2[k] + 1)
-                    {
-                        dp2[j] = dp2[k] + 1;
-
-                        if (decLen < dp2[k] + 1)
-                            decLen = dp2[k] + 1;
-                    }
-                }
-            }
-
-            if(max < incLen + decLen - 1)
-                max = incLen + decLen - 1;
-        }
-
-        System.out.println(max);
     }
 }
