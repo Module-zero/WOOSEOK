@@ -18,22 +18,26 @@ import java.io.InputStreamReader;
 public class Q2447
 {
     static StringBuilder sb = new StringBuilder();
+    static char[][] ary = new char[2200][2200];
 
-    public static void foo(int n, char ch)
+    public static void foo(int y, int x, int n)
     {
         if(n == 1)
-            sb.append(ch);
-
-        int mid = n / 3;
-
-        for(int i=0; i<n; i++)
         {
-            for(int j=0; j<n; j++)
+            ary[y][x] = '*';
+            return;
+        }
+
+        int mid = n/3;
+
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<3; j++)
             {
-                if(i >= mid && i < 2*mid && j >= mid && j < 2*mid)
-                    foo(n/3, ch);
-                else
-                    foo(n/3, ch);
+                if(i == 1 && j == 1)
+                    continue;
+
+                foo(y + mid * i, x + mid * j, mid);
             }
         }
     }
@@ -44,16 +48,16 @@ public class Q2447
 
         int N = Integer.parseInt(br.readLine());
 
-        int mid = N / 3;
+        foo(0, 0, N);
 
         for(int i=0; i<N; i++)
         {
             for(int j=0; j<N; j++)
             {
-                if(i >= mid && i < 2*mid && j >= mid && j < 2*mid)
-                    foo(N/3, ' ');
+                if(ary[i][j] == '*')
+                    sb.append(ary[i][j]);
                 else
-                    foo(N/3, '*');
+                    sb.append(' ');
             }
 
             sb.append('\n');
