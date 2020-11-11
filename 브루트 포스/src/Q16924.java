@@ -53,12 +53,6 @@ public class Q16924
             }
         }
 
-        // 십자가로 그릴 수 있는 '*'이라는 것을 기록
-        for(int i = r - n; i <= r + n; i++)
-            check[i][c] = true;
-        for(int i = c - n; i <= c + n; i++)
-            check[r][i] = true;
-
         return true;
     }
 
@@ -87,15 +81,28 @@ public class Q16924
             {
                 if(ary[i][j] == '*')
                 {
-                    for(int n=(M-2)/2; n>=1; n--)
+                    int l=0;
+
+                    for(int n=1; ; n++)
                     {
                         // n 크기의 십자가가 가능하면 출력
                         if (cross(i, j, n))
-                        {
-                            cnt++;
-                            sb.append(i).append(' ').append(j).append(' ').append(n).append('\n');
+                            l = n;
+                        else
                             break;
-                        }
+                    }
+
+                    // 그릴 수 있는 십자가가 있었으면 가장 큰 십자가 크기가 저장되어 있음
+                    if(l > 0)
+                    {
+                        cnt++;
+                        sb.append(i).append(' ').append(j).append(' ').append(l).append('\n');
+
+                        // 십자가로 그릴 수 있는 '*'이라는 것을 기록
+                        for(int a = i - l; a <= i + l; a++)
+                            check[a][j] = true;
+                        for(int b = j - l; b <= j + l; b++)
+                            check[i][b] = true;
                     }
                 }
             }
