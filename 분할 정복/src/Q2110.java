@@ -7,6 +7,8 @@ https://www.acmicpc.net/problem/2805
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 /**
@@ -20,7 +22,7 @@ public class Q2110
 {
     static int N;
     static int C;
-    static int[] ary = new int[200001];
+    static ArrayList<Integer> ary = new ArrayList<>();
 
     public static void main(String[] args) throws IOException
     {
@@ -30,18 +32,12 @@ public class Q2110
 
         N = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
 
         for(int i=0; i<N; i++)
-        {
-            ary[i] = Integer.parseInt(br.readLine());
-            if(ary[i] < min)
-                min = ary[i];
-            if(ary[i] > max)
-                max = ary[i];
-        }
+            ary.add(Integer.parseInt(br.readLine()));
 
+        Collections.sort(ary);
 
+        
     }
 }
