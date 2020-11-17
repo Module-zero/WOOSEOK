@@ -38,6 +38,12 @@ public class Q2110
 
         Collections.sort(ary);
 
-        
+        int min = ary.get(0);
+        int max = ary.get(ary.size()-1);
+
+        for(int i=min; i<=max; i++)
+        {
+            
+        }
     }
 }
