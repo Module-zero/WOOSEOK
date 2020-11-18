@@ -20,53 +20,57 @@ public class Q1062
 {
     static int N;
     static int K;
-    static String[] strs = new String[51];
+    static int[] word = new int[51];
     static int max = Integer.MIN_VALUE;
-    static boolean[] word = new boolean[26];
+    static int bit = 0;
 
-    public static void foo(int index, int k)
+    public static boolean promise(int cnt)
     {
-        if(k < 0)
-            return;
+        // a, n, t, i, c와 K-5개보다 많은 알파벳을 배웠으면
+        if(cnt > K-5)
+            return false;
 
-        if(index == 26)
+        return true;
+    }
+
+    public static void foo(int index, int cnt)
+    {
+        if(promise(cnt))
         {
-            int cnt = 0;
-
-            for(int i=0; i<N; i++)
+            // a, n, t, i, c를 제외한 알파벳을 순회했으면 종료
+            if(index == 26)
             {
-                String str = strs[i];
+                int i = 0;
+                int wordCnt = 0;
 
-                boolean isOk = true;
-                for(int j=0; j<str.length(); j++)
+                // 입력받은 단어가 끝날 때까지
+                while(word[i] != 0)
                 {
-                    char ch = str.charAt(j);
+                    // 모두 배웠을 경우 카운트 증가
+                    if((word[i] & bit) == word[i])
+                        wordCnt++;
 
-                    // 배우지 않은 단어면 종료
-                    if(!word[ch - 'a'])
-                    {
-                        isOk = false;
-                        break;
-                    }
+                    i++;
                 }
 
-                if(isOk)
-                    cnt++;
+                if(wordCnt > max)
+                    max = wordCnt;
+
+                return;
             }
 
-            if(max < cnt)
-                max = cnt;
+            if(index != 'a' - 'a' && index != 'n' - 'a' && index != 't' - 'a' && index != 'i' - 'a' && index != 'c' - 'a')
+            {
+                // a, n, t, i ,c를 제외한 알파벳을 가르친다.
+                bit |= (1 << index);
+                foo(index + 1, cnt + 1);
 
-            return;
+                // 가르치지 않는다.
+                bit &= ~(1 << index);
+            }
+
+            foo(index+1, cnt);
         }
-
-        // 가르쳤을 때
-        word[index] = true;
-        foo(index+1, k-1);
-        word[index] = false;
-        // 가르치지 않았을 때
-        if(index != 'a' - 'a' || index != 'n' - 'a' || index != 't' - 'a' || index != 'i' - 'a' || index != 'c' - 'a')
-            foo(index+1, k);
     }
 
     public static void main(String[] args) throws IOException
@@ -77,15 +81,27 @@ public class Q1062
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        for(int i=0; i<N; i++)
-            strs[i] = br.readLine();
-
-        // anta, tica가 알파벳 5개
         if(K < 5)
+        {
             System.out.println(0);
-        else
-            foo(0, K);
+            return;
+        }
 
+        bit |= (1 << 'a' - 'a');
+        bit |= (1 << 'n' - 'a');
+        bit |= (1 << 't' - 'a');
+        bit |= (1 << 'i' - 'a');
+        bit |= (1 << 'c' - 'a');
+
+        for(int i=0; i<N; i++)
+        {
+            String str = br.readLine();
+
+            for(int j=0; j<str.length(); j++)
+                word[i] |= 1 << (str.charAt(j) - 'a');
+        }
+
+        foo(0, 0);
         System.out.println(max);
     }
 }
