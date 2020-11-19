@@ -34,6 +34,14 @@ public class Q15683
         for(int i=0; i<N; i++)
         {
             for(int j=0; j<M; j++)
+                System.out.print(ary[i][j] + " ");
+            System.out.println();
+        }
+        System.out.println();
+
+        for(int i=0; i<N; i++)
+        {
+            for(int j=0; j<M; j++)
             {
                 if(ary[i][j] == '0')
                     cnt++;
@@ -63,13 +71,70 @@ public class Q15683
             case '1':
                 for(int i=0; i<4; i++)
                 {
+                    int newRow = cctv[0];
+                    int newCol = cctv[0];
+                    while(true)
+                    {
+                        newRow += dr[i];
+                        if (newRow < 0 || newRow >= N)
+                            break;
 
+                        newCol += dc[i];
+                        if(newCol < 0 || newCol >= M)
+                            break;
+
+                        if(ary[newRow][newCol] == '6')
+                            break;
+
+                        if(ary[newRow][newCol] == '0')
+                            ary[newRow][newCol] = '#';
+                    }
+
+                    foo(index+1);
                 }
                 break;
             case '2':
                 for(int i=0; i<2; i++)
                 {
+                    int newRow = cctv[0];
+                    int newCol = cctv[1];
+                    while(true)
+                    {
+                        newRow += dr[i];
+                        if(newRow < 0 || newRow >= N)
+                            break;
 
+                        newCol += dc[i];
+                        if(newCol < 0 || newCol >= M)
+                            break;
+
+                        if(ary[newRow][newCol] == '6')
+                            break;
+
+                        if(ary[newRow][newCol] == '0')
+                            ary[newRow][newCol] = '#';
+                    }
+
+                    newRow = cctv[0];
+                    newCol = cctv[1];
+                    while(true)
+                    {
+                        newRow += dr[3-i];
+                        if(newRow < 0 || newRow >= N)
+                            break;
+
+                        newCol += dc[3-i];
+                        if(newCol < 0 || newCol >= M)
+                            break;
+
+                        if(ary[newRow][newCol] == '6')
+                            break;
+
+                        if(ary[newRow][newCol] == '0')
+                            ary[newRow][newCol] = '#';
+                    }
+
+                    foo(index + 1);
                 }
                 break;
             case '3':
@@ -85,12 +150,30 @@ public class Q15683
                 }
                 break;
             case '5':
-            {
                 for(int i=0; i<4; i++)
                 {
+                    int newRow = cctv[0];
+                    int newCol = cctv[1];
 
+                    while(true)
+                    {
+                        newRow += dr[i];
+                        if(newRow < 0 || newRow >= N)
+                            break;
+
+                        newCol += dc[i];
+                        if(newCol < 0 || newCol >- M)
+                            break;
+
+                        if(ary[newRow][newCol] == '6')
+                            break;
+
+                        if(ary[newRow][newCol] == '0')
+                            ary[newRow][newCol] = '#';
+                    }
                 }
-            }
+
+                foo(index+1);
                 break;
         }
     }
