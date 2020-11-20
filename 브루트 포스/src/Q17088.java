@@ -1,3 +1,9 @@
+/*
+등차수열 변환
+
+https://www.acmicpc.net/problem/17088
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +16,7 @@ import java.util.StringTokenizer;
  * Time: 오후 11:19
  */
 
-public class Main
+public class Q17088
 {
     static int N;
     static int[] ary = new int[100001];
