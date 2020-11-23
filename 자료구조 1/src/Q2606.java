@@ -18,41 +18,65 @@ import java.util.StringTokenizer;
 
 public class Q2606
 {
+    static int[] parent = new int[101];
+    static int[] rank = new int[101];
+
+    public static int find(int n)
+    {
+        if(n == parent[n])
+            return n;
+        else
+            return parent[n] = find(parent[n]);
+    }
+
+    public static void merge(int n1, int n2)
+    {
+        n1 = find(n1);
+        n2 = find(n2);
+
+        if(n1 == n2)
+            return;
+
+        // 항상 n2가 깊이가 작은 트리가 되게 한다.
+        if(rank[n1] < rank[n2])
+        {
+            int tmp = n1;
+            n1 = n2;
+            n2 = tmp;
+        }
+
+        parent[n2] = n1;
+        if(rank[n1] == rank[n2])
+            rank[n1]++;
+    }
+
     public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
 
-        boolean[][] check = new boolean[101][101];
-        boolean[] ans = new boolean[101];
+        for(int i=1; i<=n; i++)
+        {
+            parent[i] = i;
+            rank[i] = 1;
+        }
 
         int m = Integer.parseInt(br.readLine());
         for(int i=0; i<m; i++)
         {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            int n1 = Integer.parseInt(st.nextToken());
+            int n2 = Integer.parseInt(st.nextToken());
 
-            check[a][b] = true;
-            check[b][a] = true;
-        }
-
-        ans[1] = true;
-        for(int i=1; i<=n; i++)
-        {
-            for(int j=1; j<=n; j++)
-            {
-                if(ans[i] && check[i][j])
-                    ans[j] = true;
-            }
+            merge(n1, n2);
         }
 
         int cnt = 0;
         for(int i=2; i<=n; i++)
         {
-            if(ans[i])
+            if(parent[1] == find(i))
                 cnt++;
         }
 
