@@ -18,144 +18,94 @@ import java.util.Stack;
 
 public class Q3111
 {
+    static int lenA;
+    static int lenT;
+
+    static class MyStack
+    {
+        char[] stack;
+        char[] sA;
+        int top;
+
+        public MyStack(String str)
+        {
+            this.stack = new char[300001];
+            this.sA = new char[25];
+            // 스택으로 비교하기 때문에 반대로 저장한다.(뒤부터 꺼내기 때문)
+            for(int i=0; i<lenA; i++)
+                this.sA[i] = str.charAt(lenA - i - 1);
+
+            top = 0;
+        }
+
+        public boolean add(char ch)
+        {
+            boolean ret = false;
+
+            stack[top++] = ch;
+
+            // 스택에 A의 길이만큼 문자가 쌓이면 A일 가능성이 있으므로 검사
+            if(top >= lenA)
+            {
+                int i = 0;
+                for(; i<lenA; i++)
+                {
+                    // 문자가 다르면 바로 종료
+                    if(stack[top - i - 1] != sA[i])
+                        break;
+                }
+
+                // 끝까지 돌았으면 A라는 의미
+                if(i == lenA)
+                {
+                    top -= lenA;
+                    ret = true;
+                }
+            }
+
+            return ret;
+        }
+    }
+
     public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String A = br.readLine();
+        lenA = A.length();
         String T = br.readLine();
+        lenT = T.length();
 
-        Stack<int[]> front = new Stack<>();
-        Stack<int[]> back = new Stack<>();
+        MyStack front = new MyStack(A);
+        MyStack back = new MyStack(new StringBuffer(A).reverse().toString());
+        boolean isFront = true;
 
-        int len = T.length();
         int fIndex = 0;
-        int bIndex = len - 1;
-        // true : 앞에서부터, false : 뒤에서부터
-        boolean isFrontTurn = true;
-
-        for(int i=0; i<len; i++)
+        int bIndex = lenT - 1;
+        while(fIndex <= bIndex)
         {
-            // 앞에서부터
-            if(isFrontTurn)
+            if(isFront)
             {
-                char ch = T.charAt(fIndex);
-
-                int stackId;
-                if(!front.isEmpty())
-                    stackId = front.peek()[1];
-                else
-                    stackId = -1;
-
-                // 차례인 정답 문자와 같으면 조건 검사
-                if(ch == A.charAt(stackId + 1))
-                {
-                    // 마지막 문자면 스택에서 삭제
-                    if(stackId + 1 == A.length() - 1)
-                    {
-//                        System.out.println(ch + " : " + (stackId + 1) + " : " + (A.length() - 1));
-                        for(int k=0; k<A.length()-1; k++)
-                            front.pop();
-
-                        isFrontTurn = false;
-                    }
-                    // 마지막 문자가 아닌 다음 문자면 스택에 저장
-                    else
-                        front.add(new int[]{fIndex, stackId + 1});
-                }
-                // 다음 문자와 다르면 -1로 저장
-                else
-                {
-                    if(ch == A.charAt(0))
-                        front.add(new int[]{fIndex, 0});
-                    else
-                        front.add(new int[]{fIndex, -1});
-                }
-
+                if(front.add(T.charAt(fIndex)))
+                    isFront = false;
                 fIndex++;
             }
             else
             {
-                char ch = T.charAt(bIndex);
-
-                int stackId;
-                if(!back.isEmpty())
-                    stackId = back.peek()[1];
-                else
-                    stackId = A.length();
-
-                System.out.println(ch + " : " + stackId);
-                // 다음 문자 순번과 같으면 조건 검사
-                if(ch == A.charAt(stackId - 1))
-                {
-                    // 첫 번째 문자와 같으면 삭제
-                    if(stackId - 1 == 0)
-                    {
-                        for(int k=0; k<A.length()-1; k++)
-                            back.pop();
-
-                        isFrontTurn = true;
-                    }
-                    // 첫 번째 문자가 아니면 스택에 저장
-                    else
-                        back.add(new int[]{bIndex, stackId - 1});
-                }
-                // 다음 문자와 다르면 A.length()로 저장
-                else
-                {
-                    if(ch == A.charAt(A.length() - 1))
-                        back.add(new int[]{bIndex, A.length() - 1});
-                    else
-                        back.add(new int[]{bIndex, A.length()});
-                }
-
+                if(back.add(T.charAt(bIndex)))
+                    isFront = true;
                 bIndex--;
             }
         }
 
-        while(!front.isEmpty())
-        {
-            int[] tmp = front.pop();
-
-            // 삭제될 가능성이 없는 문자면 인덱스 범위를 벗어날 수 있기에 변경
-            if(tmp[1] == -1)
-            {
-                tmp[1] = A.length();
-                back.add(tmp);
-            }
-            else
-            {
-                int stackId;
-                if(!back.isEmpty())
-                    stackId = back.peek()[1];
-                else
-                    stackId = A.length();
-
-                // 다음 순번의 문자와 같으면
-                if(stackId - 1 == tmp[1])
-                {
-                    // 첫 번째 문자와 같으면 삭제
-                    if(stackId - 1 == 0)
-                    {
-                        for(int k = 0; k < A.length() - 1; k++)
-                            back.pop();
-                    }
-                    // 첫 번째 문자가 아니면 저장
-                    else
-                        back.add(tmp);
-                }
-                // 다음 순번의 문자와 다르면
-                else
-                    back.add(new int[]{tmp[0], A.length()});
-            }
-        }
+        while(front.top > 0)
+            back.add(front.stack[--front.top]);
 
         StringBuilder sb = new StringBuilder();
-        while(!back.isEmpty())
-        {
-            sb.append(T.charAt(back.pop()[0]));
-        }
+        while(back.top > 0)
+            sb.append(back.stack[--back.top]);
 
         System.out.println(sb.toString());
     }
 }
+
