@@ -22,23 +22,21 @@ public class Q1202
     {
         int M;
         int V;
-        boolean isBag;
 
-        public Jewel(int M, int V, boolean isBag)
+        public Jewel(int M, int V)
         {
             this.M = M;
             this.V = V;
-            this.isBag = isBag;
         }
 
         @Override
         public int compareTo(Jewel o)
         {
-            if(M < o.M)
-                return -1;
+            if(M > o.M)
+                return 1;
             else if(M == o.M)
             {
-                if(V < o.V)
+                if(V > o.V)
                     return -1;
                 else if(V == o.V)
                     return 0;
@@ -46,7 +44,7 @@ public class Q1202
                     return 1;
             }
             else
-                return 1;
+                return -1;
         }
     }
 
@@ -59,44 +57,40 @@ public class Q1202
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        Jewel[] J = new Jewel[1000000];
+        Jewel[] jewels = new Jewel[300001];
+        int[] bags = new int[300001];
         for(int i=0; i<N; i++)
         {
             st = new StringTokenizer(br.readLine());
 
-            int M = Integer.parseInt(st.nextToken());
-            int V = Integer.parseInt(st.nextToken());
+            int M =  Integer.parseInt(st.nextToken());
+            int V =  Integer.parseInt(st.nextToken());
 
-            J[i] = new Jewel(M, V, false);
+            jewels[i] = new Jewel(M, V);
         }
 
-        int[] C = new int[K];
+        Arrays.sort(jewels, 0, N);
 
         for(int i=0; i<K; i++)
-        {
-            C[i] = Integer.parseInt(br.readLine());
-            J[N + i] = new Jewel(C[i], 1000001, true);
-        }
+            bags[i] = Integer.parseInt(br.readLine());
 
-        Arrays.sort(J, 0, N+K);
+        Arrays.sort(bags, 0, K);
 
-        for(int i=0; i<N+K; i++)
-            System.out.println(J[i].M + " : " + J[i].V + " : "  + J[i].isBag);
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
 
-        int cnt = 0;
         long sum = 0;
-        for(int i=0; i<N; i++)
+        int jId = 0;
+        for(int bId = 0; bId < K; bId++)
         {
-            // K개를 골랐거나, N개를 다 봤으면 종료
-            if(cnt == K)
-                break;
-
-            // 가방에 들어갈 수 있을 경우
-            if(J[i].M <= C[cnt])
+            // 가방에 들어갈 수 있는 보석을 다 큐에 넣는다.
+            while(jId < N && jewels[jId].M <= bags[bId])
             {
-                sum += J[i].V;
-                cnt++;
+                queue.add(-jewels[jId].V);
+                jId++;
             }
+
+            if(!queue.isEmpty())
+                sum += -queue.poll();
         }
 
         System.out.println(sum);
