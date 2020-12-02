@@ -34,11 +34,30 @@ public class Q12970
                 continue;
 
             boolean[] check = new boolean[51];
-            int aCnt = 0;
-            for(int i=N-1; i>=0; i--)
+            int totCnt = 0;
+            for(int i=0; i<N; i++)
             {
-                int curCnt =
+                // A를 놓으면 만들어지는 조건 쌍의 개수
+                int curCnt = b;
+                if(totCnt + curCnt <= K)
+                {
+                    // A를 놓는다.
+                    check[i] = true;
+                    totCnt += curCnt;
+                }
+                else
+                    b--;
             }
+
+            for(int i=0; i<N; i++)
+            {
+                if(check[i])
+                    System.out.print("A");
+                else
+                    System.out.print("B");
+            }
+
+            return;
         }
 
         System.out.println(-1);

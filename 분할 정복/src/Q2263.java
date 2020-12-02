@@ -20,23 +20,19 @@ public class Q2263
 {
     static int[] in = new int[100001];
     static int[] post = new int[100001];
-    static int[] position = new int[100001];
     static StringBuilder sb = new StringBuilder();
 
-    public static void solve(int inLeft, int inRight, int postLeft, int postRight)
+    public static void foo(int in_start, int in_end, int post_start, int post_end)
     {
-        if(inLeft > inRight || postLeft > postRight)
+        System.out.print(post[post_end] + " ");
+        if(in_start == in_end && post_start == post_end)
             return;
 
-        int root = post[postRight];
-        int p = position[root];
+        int in_mid = (in_start + in_end) / 2;
+        int post_mid = (post_start + post_end) / 2;
 
-        sb.append(root).append(" ");
-
-        int leftSize = p - inLeft;
-        // 잘 모르겠음
-        solve(inLeft, p-1, postLeft, postLeft + leftSize - 1);
-        solve(p+1, inRight, postLeft + leftSize, postRight-1);
+        foo(in_start, in_mid - 1, post_start, );
+        foo(in_mid + 1, in_end, , post_end - 1)
     }
 
     public static void main(String[] args) throws IOException
@@ -53,12 +49,6 @@ public class Q2263
         for(int i=0; i<n; i++)
             post[i] = Integer.parseInt(st.nextToken());
 
-        // 인덱싱을 빠르게 하기 위한 position 배열
-        for(int i=0; i<n; i++)
-            position[in[i]] = i;
-
-        solve(0, n-1, 0, n-1);
-
-        System.out.println(sb.toString());
+        foo(0, n-1, 0, n-1);
     }
 }
