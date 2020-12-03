@@ -22,31 +22,9 @@ public class Q2448
     public static void foo(int y, int x, int n)
     {
         if(n == 1)
-        {
-            ary[y][x] = '*';
             return;
-        }
 
-        int mid = n/2;
-        int midmid = n/3;
-
-        for(int i=0; i<3; i++)
-        {
-            for(int j=0; j<5; j++)
-            {
-                if(i == 0 && j == midmid)
-                {
-
-                }
-                else if(i == 1 && (j == mid-1 || j == mid+1))
-                {
-                }
-                else if(i == 2)
-                {
-
-                }
-            }
-        }
+        for(int )
     }
 
     public static void main(String[] args) throws IOException
@@ -55,5 +33,13 @@ public class Q2448
 
         int N = Integer.parseInt(br.readLine());
 
+        foo(0, 0, N);
+        for(int i=0; i<N; i++)
+        {
+            for(int j=0; j<N; j++)
+                System.out.print(ary[i][j]);
+
+            System.out.println();
+        }
     }
 }

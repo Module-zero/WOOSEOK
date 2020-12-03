@@ -20,19 +20,22 @@ public class Q2263
 {
     static int[] in = new int[100001];
     static int[] post = new int[100001];
+    static int[] position = new int[100001];
     static StringBuilder sb = new StringBuilder();
 
-    public static void foo(int in_start, int in_end, int post_start, int post_end)
+    public static void foo(int inStart, int inEnd, int postStart, int postEnd)
     {
-        System.out.print(post[post_end] + " ");
-        if(in_start == in_end && post_start == post_end)
+        if(inStart > inEnd || postStart > postEnd)
             return;
 
-        int in_mid = (in_start + in_end) / 2;
-        int post_mid = (post_start + post_end) / 2;
+        int root = post[postEnd];
+        sb.append(root).append(' ');
 
-        foo(in_start, in_mid - 1, post_start, );
-        foo(in_mid + 1, in_end, , post_end - 1)
+        int pos = position[root];
+        int leftSize = pos - inStart;
+
+        foo(inStart, pos - 1, postStart, postStart + leftSize - 1);
+        foo(pos + 1, inEnd, postStart + leftSize, postEnd-1);
     }
 
     public static void main(String[] args) throws IOException
@@ -43,12 +46,17 @@ public class Q2263
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i=0; i<n; i++)
+        {
             in[i] = Integer.parseInt(st.nextToken());
+            position[in[i]] = i;
+        }
 
         st = new StringTokenizer(br.readLine());
         for(int i=0; i<n; i++)
             post[i] = Integer.parseInt(st.nextToken());
 
         foo(0, n-1, 0, n-1);
+
+        System.out.println(sb.toString());
     }
 }

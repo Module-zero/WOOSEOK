@@ -49,7 +49,7 @@ public class Q1517
             else
             {
                 ans[k++] = ary[r++];
-                cnt += mid - l;
+                cnt += (mid - l + 1);
             }
         }
 
