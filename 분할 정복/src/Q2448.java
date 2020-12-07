@@ -24,7 +24,6 @@ public class Q2448
         if(n == 1)
             return;
 
-        for(int )
     }
 
     public static void main(String[] args) throws IOException

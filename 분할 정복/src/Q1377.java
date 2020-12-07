@@ -18,17 +18,30 @@ import java.io.InputStreamReader;
 public class Q1377
 {
     static int N;
-    static int[] ary = new int[500001];
-    static int[] tmp = new int[500001];
+    static Bubble[] A = new Bubble[500001];
+    static Bubble[] tmp = new Bubble[500001];
+
+    static class Bubble
+    {
+        int num;
+        int order;
+
+        public Bubble(int num, int order)
+        {
+            this.num = num;
+            this.order = order;
+        }
+    }
 
     public static void sort(int start, int end)
     {
-        if(start == end)
+        if(start >= end)
             return;
 
         int mid = (start + end) / 2;
-        sort(start, mid - 1);
-        sort(mid, end);
+
+        sort(start, mid);
+        sort(mid+1, end);
         merge(start, end);
     }
 
@@ -42,17 +55,19 @@ public class Q1377
 
         while(i <= mid && j <= end)
         {
-            if(ary[i] < ary[j])
-                tmp[k++] = ary[i++];
+            if(A[i].num <= A[j].num)
+                tmp[k++] = A[i++];
             else
-                tmp[k++] = ary[j++];
+                tmp[k++] = A[j++];
         }
 
         while(i <= mid)
-            tmp[k++] = ary[i++];
+            tmp[k++] = A[i++];
         while(j <= end)
-            tmp[k++] = ary[j++];
+            tmp[k++] = A[j++];
 
+        for(int a=start; a<=end; a++)
+            A[a] = tmp[a-start];
     }
 
     public static void main(String[] args) throws IOException
@@ -60,7 +75,24 @@ public class Q1377
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
+
         for(int i=0; i<N; i++)
-            ary[i] = Integer.parseInt(br.readLine());
+        {
+            int num = Integer.parseInt(br.readLine());
+            A[i] = new Bubble(num, i);
+        }
+
+        sort(0, N-1);
+
+        int max = Integer.MIN_VALUE;
+        for(int i=0; i<N; i++)
+        {
+            int ans = A[i].order - i;
+
+            if(ans > max)
+                max = ans;
+        }
+
+        System.out.println(max+1);
     }
 }
