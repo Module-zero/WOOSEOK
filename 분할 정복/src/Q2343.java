@@ -43,12 +43,6 @@ public class Q2343
         while(start <= end)
         {
             int mid = (start + end) / 2;
-            // 모두 담아야 하기 때문에 가장 큰 블루레이를 담을 수 없는 크기면 크기를 늘린다.
-            if(mid < ary[N-1])
-            {
-                start = mid + 1;
-                continue;
-            }
 
             // 블루레이의 개수
             int cnt = 1;
