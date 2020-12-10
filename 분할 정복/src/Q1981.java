@@ -7,6 +7,8 @@ https://www.acmicpc.net/problem/1981
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -18,52 +20,12 @@ import java.util.StringTokenizer;
 
 public class Q1981
 {
-    static int n;
-    static int[][] ary = new int[101][101];
-    static boolean[][] check;
-    static int[] dr = {-1, 0, 0, 1};
-    static int[] dc = {0, -1, 1, 0};
-
-    public static int dfs(int r, int c, int max, int min)
-    {
-        if(check[r][c])
-            return -1;
-
-        check[r][c] = true;
-        // (n, n)에 도착했으면 true
-        if(r == n-1 && c == n-1)
-            return max - min;
-
-        for(int i=0; i<4; i++)
-        {
-            int newR = r + dr[i];
-            if(newR < 0 || newR >= n)
-                continue;
-            int newC = c + dc[i];
-            if(newC < 0 || newC >= n)
-                continue;
-
-            if(check[newR][newC])
-                continue;
-
-            max = Integer.max(ary[newR][newC], max);
-            min = Integer.min(ary[newR][newC], min);
-
-            int ret = dfs(newR, newC, max, min);
-            if(ret >= 0)
-                return ret;
-        }
-
-        return -1;
-    }
-
     public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        n = Integer.parseInt(br.readLine());
-        ary = new int[101][101];
-
+        int n = Integer.parseInt(br.readLine());
+        int[][] ary = new int[101][101];
         for(int i=0; i<n; i++)
         {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -72,23 +34,74 @@ public class Q1981
                 ary[i][j] = Integer.parseInt(st.nextToken());
         }
 
+        int[] dr = {-1, 0, 0, 1};
+        int[] dc = {0, -1, 1, 0};
+
         int start = 0;
         int end = 200;
-        int min = Integer.MAX_VALUE;
 
+        int min = 0;
+        // 이분탐색 시작
         while(start <= end)
         {
+            // 최댓값과 최솟값의 차이를 정한다.
             int mid = (start + end) / 2;
-            check = new boolean[100][100];
+            boolean isFound = false;
 
-            int ret = dfs(0, 0, ary[0][0], ary[0][0]);
-            if(ret >= mid)
+            // num : 최솟값, num+mid : 최댓값
+            for(int num=0; num+mid<=200; num++)
             {
-                min = Integer.min(mid, min);
+                boolean[][] check = new boolean[101][101];
+                // 범위를 넘어서면 다음 최소~최대로
+                if(ary[0][0] < num || ary[0][0] > num+mid)
+                    continue;
 
-                end = mid - 1;
+                // BFS 탐색 시작
+                Queue<int[]> queue = new LinkedList<>();
+                queue.add(new int[]{0, 0});
+                check[0][0] = true;
+                while(!queue.isEmpty())
+                {
+                    int[] tmp = queue.poll();
+                    int r = tmp[0];
+                    int c = tmp[1];
+
+                    for(int i=0; i<4; i++)
+                    {
+                        int newR = r + dr[i];
+                        if(newR < 0 || newR >= n)
+                            continue;
+                        int newC = c + dc[i];
+                        if(newC < 0 || newC >= n)
+                            continue;
+
+                        if(check[newR][newC] || ary[newR][newC] < num || ary[newR][newC] > num+mid)
+                            continue;
+
+                        // 목적지까지 도착했으면 탐색 종료
+                        if(newR == n-1 && newC == n-1)
+                        {
+                            isFound = true;
+                            break;
+                        }
+
+                        check[newR][newC] = true;
+                        queue.add(new int[]{newR, newC});
+                    }
+
+                    if(isFound)
+                        break;
+                }
+
+                if(isFound)
+                {
+                    min = mid;
+                    end = mid - 1;
+                    break;
+                }
             }
-            else
+
+            if(!isFound)
                 start = mid + 1;
         }
 
