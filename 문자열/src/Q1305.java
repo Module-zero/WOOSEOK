@@ -26,13 +26,16 @@ public class Q1305
 
         int[] pi = new int[1000001];
         int j = 0;
-        for(int i=1; i<L; i++)
-        {
-            while(j > 0 && str.charAt(i) != str.charAt(j))
-                j = pi[j-1];
 
-            if(str.charAt(i) == str.charAt(j))
+        for (int i=1; i<L; i++)
+        {
+            while (j > 0 && str.charAt(i) != str.charAt(j))
+                j = pi[j - 1];
+
+            if (str.charAt(i) == str.charAt(j))
                 pi[i] = ++j;
         }
+
+        System.out.println(L - pi[L-1]);
     }
 }

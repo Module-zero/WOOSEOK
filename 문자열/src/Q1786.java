@@ -47,9 +47,11 @@ public class Q1786
 
             if(T.charAt(i) == P.charAt(j))
             {
+                // 마지막 글자면 카운트 증가
                 if(j == m-1)
                 {
-                    sb.append(i-m+2);
+                    // 시작 인덱스(1부터 시작)
+                    sb.append(i-m+2).append(' ');
                     j = fail[j];
                     cnt++;
                 }
