@@ -77,10 +77,10 @@ public class Q16986
             // 앞의 인덱스의 승
             if(A[hand[winner]][hand[next]] == 2)
                 winner = winner;
-                // 비겼을 경우 순서가 늦은 사람이 승
+            // 비겼을 경우 순서가 늦은 사람이 승
             else if(A[hand[winner]][hand[next]] == 1)
                 winner = (next > winner ? next : winner);
-                // 뒤의 인덱스의 승
+            // 뒤의 인덱스의 승
             else
                 winner = next;
 

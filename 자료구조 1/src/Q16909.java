@@ -1,7 +1,7 @@
 /*
-별 찍기 - 11
+카드 구매하기 3
 
-https://www.acmicpc.net/problem/2448
+https://www.acmicpc.net/problem/16909
  */
 
 import java.io.BufferedReader;
@@ -11,23 +11,21 @@ import java.io.InputStreamReader;
 /**
  * Created by WOOSERK.
  * User: WOOSERK
- * Date: 2020-11-10
- * Time: 오후 2:04
+ * Date: 2020-12-15
+ * Time: 오후 4:29
  */
 
-public class Q2448
+public class Q16909
 {
-    static int[][] ary = new int[3*1024+1][3*1024+1];
-
-    static void foo(int r, int c, int size)
-    {
-    }
-
     public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
+        int[] A = new int[1000001];
+        for(int i=0; i<N; i++)
+            A[i] = Integer.parseInt(br.readLine());
+
 
     }
 }
