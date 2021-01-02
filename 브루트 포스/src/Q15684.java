@@ -26,6 +26,8 @@ public class Q15684
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int H = Integer.parseInt(st.nextToken());
+
+        boolean[][] hor = new boolean[11][31];
         for(int i=0; i<M; i++)
         {
 
