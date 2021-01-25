@@ -34,7 +34,34 @@ public class Q1890
                 ary[i][j] = Integer.parseInt(st.nextToken());
         }
 
+        int[] dr = {1, 0};
+        int[] dc = {0, 1};
+
         long[][] d = new long[101][101];
-        Queue<int[]> queue = new LinkedList<>();
+        d[0][0] = 1;
+
+        for(int i=0; i<N; i++)
+        {
+            for(int j=0; j<N; j++)
+            {
+                int rem = ary[i][j];
+                if(rem == 0)
+                    continue;
+
+                for(int k=0; k<2; k++)
+                {
+                    int newR = i + dr[k]*rem;
+                    if(newR >= N)
+                        continue;
+                    int newC = j + dc[k]*rem;
+                    if(newC >= N)
+                        continue;
+
+                    d[newR][newC] += d[i][j];
+                }
+            }
+        }
+
+        System.out.println(d[N-1][N-1]);
     }
 }
