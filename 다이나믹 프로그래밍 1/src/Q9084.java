@@ -28,33 +28,22 @@ public class Q9084
         {
             int N = Integer.parseInt(br.readLine());
 
-            int[] ary = new int[20];
-            int[] dp = new int[10001];
-
             StringTokenizer st = new StringTokenizer(br.readLine());
+            int[] token = new int[21];
             for(int i=0; i<N; i++)
-                ary[i] = Integer.parseInt(st.nextToken());
+                token[i] = Integer.parseInt(st.nextToken());
 
-            dp[0] = 1;
-            int M = Integer.parseInt(br.readLine());
-
-            for(int money=0; money<=M; money++)
+            int[] dp = new int[10001];
+            int target = Integer.parseInt(br.readLine());
+            for(int i=0; i<N; i++)
             {
-                for(int id=0; id<N; id++)
-                {
-                    int cur = money - ary[id];
+                dp[token[i]]++;
 
-                    if(cur < 0)
-                        break;
-
-                    dp[money] += dp[cur];
-                }
+                for(int j=token[i]; j<=target; j++)
+                    dp[j] = dp[j] + dp[j - token[i]];
             }
-            for(int i=0; i<=M; i++)
-                System.out.print(dp[i] + " ");
-            System.out.println();
 
-            sb.append(dp[M]).append('\n');
+            sb.append(dp[target]).append('\n');
         }
 
         System.out.print(sb.toString());
