@@ -4,9 +4,7 @@
 https://www.acmicpc.net/problem/1325
  */
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -18,9 +16,9 @@ import java.util.*;
 
 public class Q1325
 {
-    static ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-    static boolean[] check;
+    static ArrayList<Integer>[] list;
     static int[] cnt = new int[10001];
+    static boolean[] check;
 
     public static void main(String[] args) throws IOException
     {
@@ -29,8 +27,10 @@ public class Q1325
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
+
+        list = new ArrayList[N+1];
         for(int i=0; i<=N; i++)
-            list.add(new ArrayList<>());
+            list[i] = new ArrayList<>();
 
         while(M-- > 0)
         {
@@ -38,41 +38,44 @@ public class Q1325
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            list.get(b).add(a);
+            list[a].add(b);
         }
 
         int maxCnt = Integer.MIN_VALUE;
-        Queue<Integer> queue = new LinkedList<>();
         for(int i=1; i<=N; i++)
         {
-            int cur = 0;
-            check = new boolean[10001];
-
-            queue.add(i);
-            check[i] = true;
-            while(!queue.isEmpty())
+            if(list[i].size() > 0)
             {
-                cur++;
-                int tmp = queue.poll();
+                check = new boolean[10001];
+                Queue<Integer> queue = new LinkedList<>();
 
-                int size = list.get(tmp).size();
-                for(int k=0; k<size; k++)
+                queue.add(i);
+                check[i] = true;
+
+                while(!queue.isEmpty())
                 {
-                    int next = list.get(tmp).get(k);
-                    if(!check[next])
+                    int tmp = queue.poll();
+
+                    for(int j : list[tmp])
                     {
-                        check[next] = true;
-                        queue.add(next);
+                        if(!check[j])
+                        {
+                            check[j] = true;
+                            queue.add(j);
+                            cnt[j]++;
+                        }
                     }
                 }
             }
+        }
 
-            cnt[i] = cur;
-            maxCnt = Integer.max(maxCnt, cur);
+        for(int i=1; i<=N; i++)
+        {
+            if(maxCnt < cnt[i])
+                maxCnt = cnt[i];
         }
 
         StringBuffer sb = new StringBuffer();
-
         for(int i=1; i<=N; i++)
         {
             if(cnt[i] == maxCnt)
@@ -80,5 +83,6 @@ public class Q1325
         }
 
         System.out.println(sb.toString());
+        br.close();
     }
 }

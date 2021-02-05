@@ -1,7 +1,7 @@
 /*
-동전 2
+동전 1
 
-https://www.acmicpc.net/problem/2294
+https://www.acmicpc.net/problem/2293
  */
 
 import java.io.BufferedReader;
@@ -13,11 +13,11 @@ import java.util.StringTokenizer;
 /**
  * Created by WOOSERK.
  * User: WOOSERK
- * Date: 2021-01-24
- * Time: 오후 5:46
+ * Date: 2021-02-05
+ * Time: 오전 2:53
  */
 
-public class Q2294
+public class Q2293
 {
     public static void main(String[] args) throws IOException
     {
@@ -32,18 +32,15 @@ public class Q2294
             token[i] = Integer.parseInt(br.readLine());
 
         Arrays.sort(token, 0, n);
-        int[] ary = new int[10001];
-        for(int i=1; i<=k; i++)
-            ary[i] = 20000;
-
+        int[] ary = new int[100001];
         for(int i=0; i<n; i++)
         {
-            int start = token[i];
+            ary[token[i]]++;
 
-            for(int s=start; s<=k; s++)
-                ary[s] = Integer.min(ary[s - start] + 1, ary[s]);
+            for(int j=token[i]; j<=k; j++)
+                ary[j] = ary[j] + ary[j-token[i]];
         }
 
-        System.out.println(ary[k] == 20000 ? -1 : ary[k]);
+        System.out.println(ary[k]);
     }
 }
