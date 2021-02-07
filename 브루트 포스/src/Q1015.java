@@ -33,7 +33,10 @@ public class Q1015
         @Override
         public int compareTo(Temp o)
         {
-            return value - o.value;
+            if(value == o.value)
+                return id - o.id;
+            else
+                return value - o.value;
         }
     }
 

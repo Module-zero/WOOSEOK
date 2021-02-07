@@ -26,42 +26,63 @@ public class Q1024
         int N = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
 
-        int sum = 0;
-        int left = 0;
-        int right = 0;
-        int lim = (N + 3) / 2;
-        for(int i=1; i<=lim; i++)
+        StringBuffer sb = new StringBuffer();
+        int i=L;
+        for(; i<=100; i++)
         {
-            if(sum <= N)
+            // 짝수
+            if(i % 2 == 0)
             {
-                sum += i;
-                right = i;
-
-                if(sum == N)
+                // ex)
+                if(N % i == i/2)
                 {
+                    int rem = N / i;
+                    int si = rem - i/2 + 1;
+                    if(si < 0)
+                    {
+                        sb.append(-1);
+                        break;
+                    }
 
+                    int ei = rem + i/2;
+
+                    while(si <= ei)
+                    {
+                        sb.append(si).append(' ');
+                        si++;
+                    }
+
+                    break;
                 }
             }
+            // 홀수
             else
             {
-                while(sum > N)
+                // ex) 18 % 3 = 5 6 7
+                if(N % i == 0)
                 {
-                    sum -= left;
-                    left = left + 1;
-                }
+                    int rem = N / i;
+                    int si = rem - i/2;
+                    if(si < 0)
+                    {
+                        sb.append(-1);
+                        break;
+                    }
 
-                if(sum == N)
-                {
+                    int ei = rem + i/2;
+                    while(si <= ei)
+                    {
+                        sb.append(si).append(' ');
+                        si++;
+                    }
 
+                    break;
                 }
             }
         }
+        if(i > 100)
+            sb.append(-1);
 
-        if(right - left + 1 > 100)
-            System.out.println(-1);
-        else
-        {
-
-        }
+        System.out.println(sb.toString());
     }
 }
