@@ -57,18 +57,42 @@ public class Q2304
 
         Stack<Temp> stack = new Stack<>();
         int area = 0;
+        int h = ary[0].height;
+        int left = 0;
         for(int i=0; i<N; i++)
         {
             if(!stack.isEmpty())
             {
-                int left = stack.peek().left;
-                while(!stack.isEmpty() && stack.peek().height < ary[i].height)
+                if(h < ary[i].height)
+                {
+                    while(!stack.isEmpty())
+                        left = stack.pop().left;
+
+                    area += (ary[i].left - left) * h;
+
+                    h = ary[i].height;
+                }
+            }
+
+            stack.add(ary[i]);
+        }
+
+        while(!stack.isEmpty())
+        {
+            Temp tmp = stack.pop();
+
+            if(stack.isEmpty())
+                area += tmp.height;
+            else
+            {
+                while(!stack.isEmpty() && stack.peek().height < tmp.height)
                     stack.pop();
 
-                area += (ary[i].left - left)
+                int right = stack.peek().left + 1;
+                area += (tmp.left + 1 - right) * tmp.height;
             }
-            else
-                stack.add(ary[i]);
         }
+
+        System.out.println(area);
     }
 }
