@@ -62,6 +62,19 @@
     * _2020-11-20(금)_
         * 유니온 파인드는 집합을 나타낼 때 주로 사용한다.(합집합)
         
+    * _2021_03_08(월)_
+        * KMP : 문자열 S가 있을 때, 패턴 P를 찾는 알고리즘
+        * Trie : 문자열 N개가 있을 때, 문자열 S를 찾는 알고리즘
+            * 출석부에서 내 이름 찾기
+        * Aho-corasick : 문자열 N개가 있을 때, 패턴 P를 찾는 알고리즘
+            * 출석부에 나랑 성(이름)이 같은 사람 찾기
+            * Aho-corasick에서 fail[node] = node가 나타내는 문자열 s의 suffix이면서 trie에 포함된 가장 긴 문자열
+            * KMP의 fail[node]와는 다르게 BFS 방식으로 fail[node]를 구한다.
+            
+    * _2021_03_11(목)_
+        * 다이나믹 프로그래밍에서 "모른다"는 정보는 굉장히 중요하다.
+        * nextPermutation, lowerBound, upperBound, KMP 알고리즘
+        
 * 다시 봐야 할 것
     * Q14391. 종이 조각 : https://www.acmicpc.net/problem/14391
     * Q16947. 서울 지하철 2호선 : https://www.acmicpc.net/problem/16947
