@@ -10,9 +10,12 @@ public class Q1757
         int[][] dp = new int[10001][501];
         for(int i=1; i<=N; i++)
         {
-            dp[i][0] = dp[i-1][1];
-            for(int j=1; j<=M; j++)
-                dp[i][j] = Integer.max(dp[i][j-1], dp[i-1][j-1] + ary[i]);
+            dp[i][0] = dp[i-1][0];
+            for(int j=1; j<=i && j<=M; j++)
+            {
+                dp[i][0] = Integer.max(dp[i][0], dp[i-j][j]);
+                dp[i][j] = Integer.max(dp[i][j - 1], dp[i - 1][j - 1] + ary[i]);
+            }
         }
 
         int ans = 0;
