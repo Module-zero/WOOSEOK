@@ -22,20 +22,21 @@ public class Q20444
         long k = Long.parseLong(st.nextToken());
 
         long start = 0;
-        long end = n;
+        long end = n/2;
         while(start <= end)
         {
             long mid = (start + end) / 2;
-            long rem = n - mid;
 
-            System.out.println(mid);
-            if((mid+1) * (rem+1) == k)
+            long cnt = (mid+1) * (n - mid + 1);
+            if(cnt == k)
             {
                 System.out.println("YES");
                 return;
             }
+            else if(cnt < k)
+                start = mid + 1;
             else
-                start = mid+1;
+                end = mid - 1;
         }
 
         System.out.println("NO");
