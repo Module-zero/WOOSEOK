@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 /**
@@ -12,93 +13,80 @@ import java.util.StringTokenizer;
 
 public class Q1711
 {
+    static class Temp
+    {
+        long a;
+        long b;
+
+        public Temp(long a, long b)
+        {
+            this.a = a;
+            this.b = b;
+        }
+
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Temp temp = (Temp) o;
+
+            if (a != temp.a) return false;
+            return b == temp.b;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = (int) (a ^ (a >>> 32));
+            result = 31 * result + (int) (b ^ (b >>> 32));
+            return result;
+        }
+    }
+
+    public static long gcd(long a, long b)
+    {
+        while(b != 0)
+        {
+            long t = a % b;
+            a = b;
+            b = t;
+        }
+
+        return a;
+    }
+
     public static void main(String[] args) throws IOException
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(br.readLine());
-        int[][] ary = new int[1501][2];
+        Temp[] ary = new Temp[1501];
         for(int i=0; i<N; i++)
         {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-            ary[i][0] = x;
-            ary[i][1] = y;
+            ary[i] = new Temp(x, y);
         }
 
-        double[][] dist = new double[1501][1501];
+        HashMap<Temp, Integer> map = new HashMap<>();
         for(int i=0; i<N-1; i++)
         {
             for(int j=i+1; j<N; j++)
             {
-                long x = ary[j][0] - ary[i][0];
-                long y = ary[j][1] - ary[i][1];
-                dist[i][j] = dist[j][i] = Math.sqrt(x*x + y*y);
+                long x = ary[i].a - ary[j].a;
+                long y = ary[i].b - ary[j].b;
+
+                long g = gcd(x, y);
+                if(g < 0)
+                    g = -g;
+
+                x /= g;
+                y /= g;
+
             }
         }
-
-        int cnt = 0;
-        for(int i=0; i<N-2; i++)
-        {
-            for(int j=i+1; j<N-1; j++)
-            {
-                for(int k=j+1; k<N; k++)
-                {
-                    double max;
-                    double min;
-                    double mid;
-
-                    if(dist[i][j] > dist[i][k] && dist[i][j] > dist[j][k])
-                    {
-                        max = dist[i][j];
-                        if(dist[i][k] < dist[j][k])
-                        {
-                            min = dist[i][k];
-                            mid = dist[j][k];
-                        }
-                        else
-                        {
-                            min = dist[j][k];
-                            mid = dist[i][k];
-                        }
-                    }
-                    else if(dist[i][k] > dist[i][j] && dist[i][k] > dist[j][k])
-                    {
-                        max = dist[i][k];
-                        if(dist[i][j] < dist[j][k])
-                        {
-                            min = dist[i][j];
-                            mid = dist[j][k];
-                        }
-                        else
-                        {
-                            min = dist[j][k];
-                            mid = dist[i][j];
-                        }
-                    }
-                    else
-                    {
-                        max = dist[j][k];
-                        if(dist[i][j] < dist[i][k])
-                        {
-                            min = dist[i][j];
-                            mid = dist[i][k];
-                        }
-                        else
-                        {
-                            min = dist[i][k];
-                            mid = dist[i][j];
-                        }
-                    }
-
-                    System.out.println(max*max + " : " + Double.sum(mid*mid,min*min));
-                    if(Double.compare(max*max, mid*mid + min*min) == 0)
-                        cnt++;
-                }
-            }
-        }
-
-        System.out.println(cnt);
     }
 }
