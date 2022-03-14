@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 public class Q12893
 {
     static int[] p = new int[2001];
+    static int[] e = new int[2001];
 
     public static int find(int n)
     {
@@ -30,14 +31,6 @@ public class Q12893
         if(a == b)
             return;
 
-        if(p[b] < p[a])
-        {
-            int tmp = p[b];
-            p[b] = p[a];
-            p[a] = tmp;
-        }
-
-        p[a] += p[b];
         p[b] = a;
     }
 
@@ -49,9 +42,40 @@ public class Q12893
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
+        for(int i=1; i<=N; i++)
+        {
+            p[i] = -1;
+            e[i] = -1;
+        }
+
+        int ans = 1;
         for(int i=0; i<M; i++)
         {
+            st = new StringTokenizer(br.readLine());
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
 
+            if(find(A) != find(B))
+            {
+                if(e[A] == -1)
+                    e[A] = B;
+                else
+                    merge(e[A], B);
+
+                if(e[B] == -1)
+                    e[B] = A;
+                else
+                    merge(e[B], A);
+            }
+            else
+            {
+                ans = 0;
+                break;
+            }
         }
+
+        for(int i=1; i<=N; i++)
+            System.out.println(p[i]);
+        System.out.println(ans);
     }
 }
