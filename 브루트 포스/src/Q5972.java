@@ -8,27 +8,27 @@ import java.util.StringTokenizer;
 /**
  * Created by WOOSERK.
  * User: WOOSERK
- * Date: 2022-03-15
- * Time: 오후 11:15
+ * Date: 2022-03-17
+ * Time: 오전 12:26
  */
 
-public class Q17396
+public class Q5972
 {
+
     static class PQ implements Comparable<PQ>
     {
-        long d;
+        int d;
         int i;
 
-        public PQ(long d, int i)
+        public PQ(int d, int i)
         {
             this.d = d;
             this.i = i;
         }
 
-        @Override
         public int compareTo(PQ o)
         {
-            return Long.compare(d, o.d);
+            return d - o.d;
         }
     }
 
@@ -40,38 +40,31 @@ public class Q17396
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
-        int[] a = new int[100001];
-        for(int i=0; i<N; i++)
-            a[i] = Integer.parseInt(st.nextToken());
-
-        ArrayList<int[]>[] list = new ArrayList[100001];
-        for(int i=0; i<N; i++)
+        int[] A = new int[50001];
+        int[] B = new int[50001];
+        int[] C = new int[50001];
+        ArrayList<int[]>[] list = new ArrayList[50001];
+        for(int i=1; i<=N; i++)
             list[i] = new ArrayList<>();
 
         for(int i=0; i<M; i++)
         {
             st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
+            A[i] = Integer.parseInt(st.nextToken());
+            B[i] = Integer.parseInt(st.nextToken());
+            C[i] = Integer.parseInt(st.nextToken());
 
-            list[start].add(new int[]{end, cost});
-            list[end].add(new int[]{start, cost});
+            list[A[i]].add(new int[]{B[i], C[i]});
+            list[B[i]].add(new int[]{A[i], C[i]});
         }
 
+        boolean[] check = new boolean[50001];
         PriorityQueue<PQ> pq = new PriorityQueue<>();
-        boolean[] check = new boolean[100001];
-        pq.add(new PQ(0, 0));
-
+        pq.add(new PQ(0, 1));
         while(!pq.isEmpty())
         {
             PQ tmp = pq.poll();
-
-            if(check[tmp.i])
-                continue;
-
-            if(tmp.i == (N-1))
+            if(tmp.i == N)
             {
                 System.out.println(tmp.d);
                 return;
@@ -80,13 +73,11 @@ public class Q17396
             check[tmp.i] = true;
             for(int[] next : list[tmp.i])
             {
-                if(check[next[0]] || (next[0] != N-1 && a[next[0]] == 1))
+                if(check[next[0]])
                     continue;
 
-                pq.add(new PQ(next[1] + tmp.d, next[0]));
+                pq.add(new PQ(tmp.d + next[1], next[0]));
             }
         }
-
-        System.out.println(-1);
     }
 }
